@@ -1,8 +1,11 @@
+"""Entry point for application"""
 from typing import Union
-
 from fastapi import FastAPI
+from Identity.database import MongoDBClient
+
 
 app = FastAPI()
+client = MongoDBClient()
 
 
 @app.get("/")
