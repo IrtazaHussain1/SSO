@@ -1,0 +1,58 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+      - id: black
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        args: ["-rn", "-sn", "--rcfile=pylintrc", "--fail-on=I"]
+        exclude: tests(/\w*)*/functional/|tests/input|tests(/\w*)*data/|doc/
+      # We define an additional manual step to allow running pylint with a spelling
+      # checker in CI.
+      - id: pylint
+        alias: pylint-with-spelling
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        args: ["-rn", "-sn", "--rcfile=pylintrc", "--fail-on=I", "--spelling-dict=en"]
+        exclude: tests(/\w*)*/functional/|tests/input|tests(/\w*)*data/|doc/
+        stages: [manual]
+      - id: sphinx-generated-doc
+        alias: sphinx-generated-doc
+        name: sphinx-generated-doc
+        entry: make -C doc/ html
+        pass_filenames: false
+        language: system
+        stages: [push]
+      - id: check-newsfragments
+        name: Check newsfragments
+        entry: python3 -m script.check_newsfragments
+        language: system
+        types: [text]
+        files: ^(doc/whatsnew/fragments)
+        exclude: doc/whatsnew/fragments/_.*.rst
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        args: [--prose-wrap=always, --print-width=88]
+        exclude: tests(/\w*)*data/
+  - repo: https://github.com/DanielNoord/pydocstringformatter
+    rev: v0.7.3
+    hooks:
+      - id: pydocstringformatter
+        exclude: *fixtures
+        args: ["--max-summary-lines=2", "--linewrap-full-docstring"]
+        files: "pylint"

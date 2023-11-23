@@ -10,7 +10,7 @@ client = MongoDBClient()
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": "World tnis is test"}
 
 
 @app.get("/items/{item_id}")
