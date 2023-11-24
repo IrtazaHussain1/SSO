@@ -13,6 +13,9 @@ pymongo = {extras = ["srv"], version = "^4.6.0"}
 pylint = "^3.0.2"
 pre-commit = "^3.5.0"
 flake8 = "^6.1.0"
+python-jose = "^3.3.0"
+pydantic = "^2.5.2"
+pydantic-settings = "^2.1.0"
 
 
 [build-system]

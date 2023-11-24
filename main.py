@@ -1,18 +1,4 @@
-"""Entry point for application"""
-from typing import Union
-from fastapi import FastAPI
-from Identity.database import MongoDBClient
+# """Entry point for application"""
+from Core.entrypoint import SSOApp
 
-
-app = FastAPI()
-client = MongoDBClient()
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World tnis is test"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+app = SSOApp.get_app()
