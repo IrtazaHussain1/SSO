@@ -1,8 +1,12 @@
+from fastapi import Request
 from fastapi import APIRouter
-from Identity.controller import authenticate
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from Identity.controller import authenticate, index
 
 
 router = APIRouter(prefix="/sso")
+templates = Jinja2Templates(directory="templates")
 
 
 @router.post("/auth")
@@ -13,6 +17,7 @@ def generate_token(username: str, password: str) -> dict:
 # def get_profile(current_user: dict = Depends(self.config.get_current_user)):
 #     return current_user
 
-@router.get("/")
-def read_root():
-    return {"Hello": "World tnis is test"}
+
+@router.get("/", response_class=HTMLResponse)
+def index(request: Request):
+    return templates.TemplateResponse("auth.html", {'request': request})

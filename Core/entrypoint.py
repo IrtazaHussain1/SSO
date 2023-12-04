@@ -1,5 +1,6 @@
 """This will be the main entry point for application"""
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.security import OAuth2AuthorizationCodeBearer
 from Core.settings import Settings
 from Identity.routes import router as SSO_Router
@@ -22,6 +23,7 @@ class SSOApp:
                 "url": "https://github.com/IrtazaHussain1/SSO/blob/main/LICENSE",
             },
         )
+        self.app.mount("/static", StaticFiles(directory="statics"), name="static")
         self.app.include_router(SSO_Router)
         self.oauth2_scheme = OAuth2AuthorizationCodeBearer(tokenUrl="token", authorizationUrl="/sso/auth")
 

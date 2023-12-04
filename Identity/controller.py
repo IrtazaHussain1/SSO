@@ -1,9 +1,11 @@
+from fastapi import HTTPException, status
+from fastapi.templating import Jinja2Templates
 from Core.models import ResponseModel
-from fastapi import FastAPI, Depends, HTTPException, status
 from Core.models import ResponseModel
 from Core.sso_config import SSOConfig
 from Identity.database import MongoClient
 
+templates = Jinja2Templates(directory="templates")
 
 
 def authenticate(username, password):
@@ -19,3 +21,13 @@ def authenticate(username, password):
 
     token_data = {"sub": response.data}
     return {"access_token": config.create_jwt_token(token_data), "token_type": "bearer"}
+
+
+def index(request):
+    return templates.TemplateResponse("auth.html", context={'request': request})
+
+def logout():
+    ...
+
+def profile():
+    ...
